@@ -1,6 +1,6 @@
 import numpy as np
-from utils import width_to_indeces
-from models import model_S21, model_S11, estimate_parameters
+from utils import width_to_indices
+from cryofit.models import model_S21, model_S11, estimate_parameters
 from fitter import Fitter, simultaneous_fit
 
 def fit_resonance(
@@ -25,7 +25,7 @@ def fit_resonance(
 
     # ============================ REAL PARTS FITTERS ============================
 
-    crop = width_to_indeces(5 * width, f0, freqs)
+    crop = width_to_indices(5 * width, f0, freqs)
 
     f21_real = Fitter()
     f21_real.datax = freqs[crop[0]:crop[1]] # Hz
@@ -46,7 +46,7 @@ def fit_resonance(
     f21_real.unity = "1"
     f21_real.scalex = lambda x: x / 1e9 # "linear" (default), "log", "dB"
     f21_real.unitx = "GHz"
-    f21_real.title = "$Fit of \\text{Re}(S_{21})$"
+    f21_real.title = "Fit of $\\text{Re}(S_{21})$"
     f21_real.labelx = "Frequency"
     f21_real.labely = "$\\text{Re}(S_{21})$"
     f21_real.show_initial_model = True
@@ -55,7 +55,6 @@ def fit_resonance(
     f21_real.show_model = True
     f21_real.figure_size = (30, 24)
 
-    metadata_S11 = read_metadata(f"../data/{basename}_S11_meta.csv")
     f11_real.scaley = "linear" # "linear" (default), "log", "dB"
     f11_real.unity = "1"
     f11_real.scalex = lambda x: x / 1e9 # "linear" (default), "log", "dB"

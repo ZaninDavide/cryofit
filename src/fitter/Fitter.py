@@ -5,9 +5,8 @@ from iminuit import Minuit
 from iminuit.cost import LeastSquares
 from scipy import stats
 
-import sys; sys.path.append("../utils")
-from number_to_text import number_to_text 
-from error_propagation import error_propagation 
+from utils import number_to_text 
+from utils import error_propagation 
 
 
 class Fitter():

@@ -1,6 +1,6 @@
 import math
 import numpy as np
-from utils import peak_width, width_to_indeces
+from utils import peak_width, width_to_indices
 
 # Characterization of superconducting resonant RF cavities for axion search with the QUAX experiment (Alessio Rettaroli Master Thesis)
 # eq. (2.54)
@@ -24,7 +24,7 @@ def estimate_parameters(freqs, S21, S11):
     theta21 = np.angle(S21)[np.argmax(np.abs(S21))] # Arg[S21(w_0)]
     theta11_up_to_pi = np.angle(S11)[np.argmax(np.abs(S21))] # Arg[S11(w_0)] up to pi due to sign of B
 
-    (id_phi, _) = width_to_indeces(width / 3, f0, freqs)
+    (id_phi, _) = width_to_indices(width / 3, f0, freqs)
     id_phi = np.argmax(np.abs(S21)) - max(1, np.argmax(np.abs(S21)) - id_phi) # we move at least one datapoint to the left
     phi = np.angle(S11[id_phi] / np.exp(1j * theta11_up_to_pi))
     f_phi = freqs[id_phi]

@@ -1,2 +1,2 @@
-from Fitter import Fitter
-from simultaneous_fit import simultaneous_fit
+from fitter.Fitter import Fitter
+from fitter.simultaneous_fit import simultaneous_fit

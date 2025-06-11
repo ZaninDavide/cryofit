@@ -1,6 +1,5 @@
 import numpy as np
-import sys; sys.path.append("../classes")
-from Fitter import Fitter
+from fitter.Fitter import Fitter
 
 def simultaneous_fit(fitters):
     """
