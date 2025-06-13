@@ -7,8 +7,12 @@ def fit_resonance(
     freqs, S11, S21,
     plot_S11_real = False,
     plot_S11_imag = False,
+    plot_S11_abs = False,
+    plot_S11_phase = False,
     plot_S21_real = False,
     plot_S21_imag = False,
+    plot_S21_abs = False,
+    plot_S21_phase = False,
 ):
     guess = estimate_parameters(freqs, S21, S11)
     f0 = guess["f0"]
@@ -76,12 +80,12 @@ def fit_resonance(
         "A": (0, A, 100),
         "theta21": (-np.pi, theta21, np.pi),
     }
-    f21_real.param_units = { "QL": "1", "Q0": "1", "f0": "Hz", "k1": "1", "k2": "1", "A": "1", "theta21": "1" }
+    f21_real.param_units = { "QL": "1", "Qi": "1", "f0": "Hz", "k1": "1", "k2": "1", "A": "1", "theta21": "1" }
     f21_real.derived_params = {
-        "Q0": lambda par: par["QL"]["value"] * (1 + par["k1"]["value"] + par["k2"]["value"]),
+        "Qi": lambda par: par["QL"]["value"] * (1 + par["k1"]["value"] + par["k2"]["value"]),
     }
     f21_real.param_displayed_names = { 
-        "Q0": "Q_i = (1 + k_1 + k_2) Q_L",
+        "Qi": "Q_i = (1 + k_1 + k_2) Q_L",
         "QL": "Q_L",
         "f0": "f_r", 
         "k1": "\\kappa_1",
@@ -98,7 +102,7 @@ def fit_resonance(
     }
     f11_real.param_units = { "QL": "1", "f0": "Hz", "k1": "1", "k2": "1", "A": "1", "theta11": "1" }
     f11_real.param_displayed_names = { 
-        "Q0": "Q_i",
+        "Qi": "Q_i",
         "QL": "Q_L",
         "f0": "f_r", 
         "k1": "\\kappa_1",
@@ -124,19 +128,31 @@ def fit_resonance(
 
     # ============================ PLOTTING ============================
 
+    f11_abs = f11_real.deep_copy()
+    f11_abs.datay = np.abs(S11)[crop[0]:crop[1]] # 1
+    f11_abs.title = "Fit of $|S_{11}|$"
+    f11_abs.labely = "$|S_{11}|$"
+    f11_abs.scaley = "dB"
+    f11_abs.model = lambda x, f0, QL, k1, k2, A, theta11: np.abs(model_S11(x, f0, QL, k1, k2, A, theta11))
+
+    f11_phase = f11_real.deep_copy()
+    f11_phase.datay = np.angle(S11)[crop[0]:crop[1]] # 1
+    f11_phase.title = "Fit of $\\text{Arg}(S_{11})$"
+    f11_phase.labely = "$\\text{Arg}(S_{11})$"
+    f11_phase.model = lambda x, f0, QL, k1, k2, A, theta11: np.angle(model_S11(x, f0, QL, k1, k2, A, theta11))
+
     if plot_S11_real == True: 
         f11_real.show_plot = True
         f11_real.plot(res)
     if plot_S11_imag == True: 
         f11_imag.show_plot = True
         f11_imag.plot(res)
-    if plot_S21_real == True: 
-        f21_real.show_plot = True
-        f21_real.plot(res)
-    if plot_S21_imag == True: 
-        f21_imag.show_plot = True
-        f21_imag.plot(res)
-
+    if plot_S11_abs == True: 
+        f11_abs.show_plot = True
+        f11_abs.plot(res)
+    if plot_S11_phase == True: 
+        f11_phase.show_plot = True
+        f11_phase.plot(res)
     if isinstance(plot_S11_real, str): 
         f11_real.show_plot = False
         f11_real.file_name = plot_S11_real
@@ -145,6 +161,40 @@ def fit_resonance(
         f11_imag.show_plot = False
         f11_imag.file_name = plot_S11_imag
         f11_imag.plot(res)
+    if isinstance(plot_S11_abs, str): 
+        f11_abs.show_plot = False
+        f11_abs.file_name = plot_S11_abs
+        f11_abs.plot(res)
+    if isinstance(plot_S11_phase, str): 
+        f11_phase.show_plot = False
+        f11_phase.file_name = plot_S11_phase
+        f11_phase.plot(res)
+
+    f21_abs = f21_real.deep_copy()
+    f21_abs.datay = np.abs(S21)[crop[0]:crop[1]] # 1
+    f21_abs.title = "Fit of $|S_{21}|$"
+    f21_abs.labely = "$|S_{21}|$"
+    f21_abs.scaley = "dB"
+    f21_abs.model = lambda x, f0, QL, k1, k2, A, theta21: np.abs(model_S21(x, f0, QL, k1, k2, A, theta21))
+
+    f21_phase = f21_real.deep_copy()
+    f21_phase.datay = np.angle(S21)[crop[0]:crop[1]] # 1
+    f21_phase.title = "Fit of $\\text{Arg}(S_{21})$"
+    f21_phase.labely = "$\\text{Arg}(S_{21})$"
+    f21_phase.model = lambda x, f0, QL, k1, k2, A, theta21: np.angle(model_S21(x, f0, QL, k1, k2, A, theta21))
+
+    if plot_S21_real == True: 
+        f21_real.show_plot = True
+        f21_real.plot(res)
+    if plot_S21_imag == True: 
+        f21_imag.show_plot = True
+        f21_imag.plot(res)
+    if plot_S21_abs == True: 
+        f21_abs.show_plot = True
+        f21_abs.plot(res)
+    if plot_S21_phase == True: 
+        f21_phase.show_plot = True
+        f21_phase.plot(res)
     if isinstance(plot_S21_real, str): 
         f21_real.show_plot = False
         f21_real.file_name = plot_S21_real
@@ -153,5 +203,13 @@ def fit_resonance(
         f21_imag.show_plot = False
         f21_imag.file_name = plot_S21_imag
         f21_imag.plot(res)
+    if isinstance(plot_S21_abs, str): 
+        f21_abs.show_plot = False
+        f21_abs.file_name = plot_S21_abs
+        f21_abs.plot(res)
+    if isinstance(plot_S21_phase, str): 
+        f21_phase.show_plot = False
+        f21_phase.file_name = plot_S21_phase
+        f21_phase.plot(res)
 
     return res

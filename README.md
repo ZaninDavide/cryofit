@@ -3,27 +3,23 @@
 ```py
 import cryofit as cr
 
-f = ...
-S21 = ...
-S11 = ...
-
-res = cr.fit_resonance(f, S11, S21, 
-    plot_S11_real = False,
-    plot_S11_imag = False,
-    plot_S21_real = True,
-    plot_S21_imag = False,
-)
+res = cr.fit_resonance(freqs, S11, S21, plot_S21_abs = True)
+print(f"Qi = {res["params"]["Q_i"]["value"]}")
 ```
 
-# Build the package
+# Build & Install
+
+## Option 1
+```bash
+pip install .
+```
+
+## Option 2
 After updating `build` with `python -m pip install --upgrade build` run
 ```bash
 python -m build
 ```
-The built package will be found inside `dist/`.
-
-## Install package locally
-After building the file you can install it locally with
+The built package will be found inside `dist/`. After building the file you can install it locally with
 ```bash
 pip install .\dist\cryofit-[VERSION].tar.gz 
 ```
