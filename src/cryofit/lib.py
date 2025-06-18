@@ -14,7 +14,7 @@ def fit_resonance(
     plot_S21_abs = False,
     plot_S21_phase = False,
 ):
-    guess = estimate_parameters(freqs, S21, S11)
+    guess = estimate_parameters(freqs, S11, S21)
     f0 = guess["f0"]
     QL = guess["QL"]
     k1 = guess["k1"]

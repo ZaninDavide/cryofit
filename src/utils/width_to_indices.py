@@ -1,4 +1,5 @@
 def width_to_indices(width, center, datax):  
+    # TODO: remove hypothesis of equally spaced points
     deltaf = ( datax[-1] - datax[0] ) / len(datax)
     min_f = center - width / 2.0
     max_f = center + width / 2.0
