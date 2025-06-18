@@ -7,6 +7,20 @@ res = cr.fit_resonance(freqs, S11, S21, plot_S21_abs = True)
 print(f"Qi = {res["params"]["Q_i"]["value"]}")
 ```
 
+
+```py
+import cryofit as cr
+
+freqs = np.linspace(f0 - , f0 + , num=...)
+S11 = cr.model_S11(freqs, ...)
+S21 = cr.model_S21(freqs, ...)
+S11 += np.random.normal(0,1e-3,len(freqs))
+S21 += np.random.normal(0,1e-3,len(freqs))
+
+res = cr.fit_resonance(freqs, S11, S21, plot_S21_abs = True)
+print(f"Qi = {res["params"]["Q_i"]["value"]}")
+```
+
 # Build & Install
 
 ## Option 1
